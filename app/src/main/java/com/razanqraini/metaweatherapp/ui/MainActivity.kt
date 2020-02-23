@@ -1,7 +1,8 @@
-package com.razanqraini.metaweatherapp
+package com.razanqraini.metaweatherapp.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.razanqraini.metaweatherapp.R
 
 class MainActivity : AppCompatActivity() {
 
