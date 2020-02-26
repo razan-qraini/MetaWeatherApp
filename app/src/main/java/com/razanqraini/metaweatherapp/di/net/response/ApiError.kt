@@ -1,4 +1,4 @@
-package com.razanqraini.metaweatherapp.di.net.model
+package com.razanqraini.metaweatherapp.di.net.response
 
 import org.json.JSONArray
 import org.json.JSONException
@@ -71,15 +71,6 @@ object ApiErrorParser {
     }
 }
 
-data class ApiError(val statusCode: Int, val message: String?, val fieldErrors: List<FieldError>?) {
-
-    companion object {
-
-        /**
-         * The source or destination resource of a method is locked.
-         */
-        const val HTTP_LOCKED = 423
-    }
-}
+data class ApiError(val statusCode: Int, val message: String?, val fieldErrors: List<FieldError>?)
 
 data class FieldError(val field: String, val message: String)

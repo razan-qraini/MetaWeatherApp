@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import com.razanqraini.metaweatherapp.di.net.ApisObserver
-import com.razanqraini.metaweatherapp.di.net.model.Response
+import com.razanqraini.metaweatherapp.di.net.response.Response
 import com.razanqraini.metaweatherapp.utils.Event
 import com.razanqraini.metaweatherapp.utils.EventObserver
 

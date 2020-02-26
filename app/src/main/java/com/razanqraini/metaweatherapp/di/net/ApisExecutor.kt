@@ -4,19 +4,17 @@ import android.content.Context
 import com.google.gson.ExclusionStrategy
 import com.google.gson.FieldAttributes
 import com.google.gson.GsonBuilder
-import com.razanqraini.metaweatherapp.di.net.model.ApiError
-import com.razanqraini.metaweatherapp.di.net.model.ApiResponse
-import com.razanqraini.metaweatherapp.di.net.model.Response
+import com.razanqraini.metaweatherapp.di.net.response.ApiError
+import com.razanqraini.metaweatherapp.di.net.response.ApiResponse
+import com.razanqraini.metaweatherapp.di.net.response.Response
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import timber.log.Timber
 import java.lang.reflect.Modifier
 import java.util.concurrent.TimeUnit
 
@@ -30,10 +28,6 @@ import java.util.concurrent.TimeUnit
  * And it will always try to parse the response even in case of errors and it fails to parse it.
  *
  * So retrofit onSuccess callback will not be invoked and onFailure will be invoked instead.
- *
- * And since retrofit doesn't provide a way to get error response on Failure callback,
- * We need this to determine if the executor has  [com.harri.manage.di.net.model.LegacyApiResponse],
- * only using a response interceptor we can read legacy apis errors [LegacyApiErrorInterceptor] is used.
  *
  * Key: The path of API.
  * Value: JSON representation of the API response.
@@ -66,21 +60,18 @@ abstract class ApisExecutor<S>(
         .map { callToSingle(call) }
 
     private fun <T : ApiResponse<R>, R> callToSingle(call: Call<T>): Response<R, ApiError> {
-        val apiPath = call.request().url.encodedPath
         return try {
             val response = call.execute()
             apiResponseHandler.handleResponse(response)
         } catch (e: Exception) {
-            return when (// Non-legacy errors are considered as HttpException.
-                e) {
+            return when (e) {
                 is HttpException -> {
                     val result = runCatching {
-                        // We the need the error body of the non-legacy error to parse later in ApiResponseHandler.
+                        // We the need the error body of the error to parse later in ApiResponseHandler.
                         e.response()?.errorBody()?.string().orEmpty()
                     }
                     return apiResponseHandler.handleFailureResponse(result.getOrNull())
                 }
-
                 // Return a generic error response when unknown error is encountered.
                 else -> Response.error(ApiError(-1, e.message, null))
             }

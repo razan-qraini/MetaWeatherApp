@@ -1,16 +1,13 @@
 package com.razanqraini.metaweatherapp.di.net
 
-import com.razanqraini.metaweatherapp.di.net.model.ApiError
-import com.razanqraini.metaweatherapp.di.net.model.ApiErrorParser
-import com.razanqraini.metaweatherapp.di.net.model.ApiResponse
-import com.razanqraini.metaweatherapp.di.net.model.Response
+import com.razanqraini.metaweatherapp.di.net.response.ApiError
+import com.razanqraini.metaweatherapp.di.net.response.ApiErrorParser
+import com.razanqraini.metaweatherapp.di.net.response.ApiResponse
+import com.razanqraini.metaweatherapp.di.net.response.Response
 import okhttp3.ResponseBody
-import java.net.HttpURLConnection
-import javax.inject.Inject
 import retrofit2.Response as RetrofitResponse
 
-class ApiResponseHandler
-@Inject constructor(private val onUnAuthorizedUser: () -> Unit) {
+class ApiResponseHandler {
 
     /**
      * Handles the API response success and possible error cases
@@ -20,7 +17,7 @@ class ApiResponseHandler
     fun <T : ApiResponse<R>, R> handleResponse(
         response: RetrofitResponse<T>
     ): Response<R, ApiError> {
-        return processStandardApiResponse(response)
+        return processApiResponse(response)
     }
 
 
@@ -34,21 +31,7 @@ class ApiResponseHandler
         return processErrorResponse(apiResponseBody)
     }
 
-    /**
-     * All legacy api responses are considered to be successful at this point,
-     * if there was a failure in the api response it would have been intercepted by the legacy apis error interceptor.
-     *
-     *
-     * A successful Api response can be NULL if the api definition in the service interface was defined with Void as the response type.
-     */
-    private fun <T : ApiResponse<R>, R> processLegacyApiResponse(
-        response: RetrofitResponse<T>
-    ): Response<R, ApiError> {
-        val legacyApiResponse = response.body()
-        return Response.success(legacyApiResponse?.data)
-    }
-
-    private fun <T : ApiResponse<R>, R> processStandardApiResponse(
+    private fun <T : ApiResponse<R>, R> processApiResponse(
         response: RetrofitResponse<T>
     ): Response<R, ApiError> {
         val responseBody = response.body()

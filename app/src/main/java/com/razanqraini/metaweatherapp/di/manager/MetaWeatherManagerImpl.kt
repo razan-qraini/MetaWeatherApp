@@ -1,7 +1,5 @@
 package com.razanqraini.metaweatherapp.di.manager
 
-import com.razanqraini.metaweatherapp.di.net.model.ApiError
-import com.razanqraini.metaweatherapp.di.net.model.Response
 import com.razanqraini.metaweatherapp.di.net.weather.MetaWeatherApisExecutor
 import com.razanqraini.metaweatherapp.di.net.weather.model.LocationDay
 import com.razanqraini.metaweatherapp.di.net.weather.model.LocationInfo
@@ -13,32 +11,42 @@ import javax.inject.Inject
 class MetaWeatherManagerImpl @Inject constructor(
     private val metaWeatherApisExecutor: MetaWeatherApisExecutor
 ) : MetaWeatherManager {
-    override fun searchLocationByName(locationName: String): Single<Response<List<LocationSearchName>, ApiError>> {
+
+    override fun searchLocationByName(locationName: String): Single<List<LocationSearchName>> {
         return metaWeatherApisExecutor.searchLocationByName(locationName)
     }
 
-    override fun searchLocationByLattLong(lattLong: String): Single<Response<List<LocationSearchLattLong>, ApiError>> {
+    override fun searchLocationByLattLong(lattLong: String): Single<List<LocationSearchLattLong>> {
         return metaWeatherApisExecutor.searchLocationByLattLong(lattLong)
     }
 
-    override fun getLocationInfo(locationName: String): Single<Response<LocationInfo, ApiError>> {
+    /**
+     * Get Location information, and a 5 day forecast
+     */
+    override fun getLocationInfo(locationName: String): Single<LocationInfo> {
         // Get woeid then pass it to get the location info
         return searchLocationByName(locationName).flatMap {
-            it.data?.first()?.woeid?.let { woeid ->
+            it.first().woeid.let { woeid ->
                 metaWeatherApisExecutor.getLocationInfo(woeid)
             }
         }
     }
 
-    override fun getLocationInfoForDay(
+    /**
+     * Get source information and forecast history for a particular day & location
+     */
+    override fun getWeatherForDate(
         locationName: String,
         date: String
-    ): Single<Response<List<LocationDay>, ApiError>> {
+    ): Single<List<LocationDay>> {
         // Get woeid then pass it to get the location info
         return searchLocationByName(locationName).flatMap {
-            it.data?.first()?.woeid?.let { woeid ->
+            it.first().woeid.let { woeid ->
                 metaWeatherApisExecutor.getLocationInfoForDay(woeid, date)
             }
         }
     }
+
+    private fun generateIconUrl(iconCode: String): String =
+        "https://www.metaweather.com/static/img/weather/png/64/$iconCode.png"
 }

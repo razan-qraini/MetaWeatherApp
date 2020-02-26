@@ -1,7 +1,5 @@
 package com.razanqraini.metaweatherapp.di.net.weather
 
-import com.razanqraini.metaweatherapp.di.net.model.ApiError
-import com.razanqraini.metaweatherapp.di.net.model.Response
 import com.razanqraini.metaweatherapp.di.net.weather.model.LocationDay
 import com.razanqraini.metaweatherapp.di.net.weather.model.LocationInfo
 import com.razanqraini.metaweatherapp.di.net.weather.model.LocationSearchLattLong
@@ -12,18 +10,18 @@ interface MetaWeatherApisExecutor {
 
     fun searchLocationByName(
         name: String
-    ): Single<Response<List<LocationSearchName>, ApiError>>
+    ): Single<List<LocationSearchName>>
 
     fun searchLocationByLattLong(
         lattLong: String
-    ): Single<Response<List<LocationSearchLattLong>, ApiError>>
+    ): Single<List<LocationSearchLattLong>>
 
     fun getLocationInfo(
         woeid: Long
-    ): Single<Response<LocationInfo, ApiError>>
+    ): Single<LocationInfo>
 
     fun getLocationInfoForDay(
         woeid: Long,
         date: String
-    ): Single<Response<List<LocationDay>, ApiError>>
+    ): Single<List<LocationDay>>
 }

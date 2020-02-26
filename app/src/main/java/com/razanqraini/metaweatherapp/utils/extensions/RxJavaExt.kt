@@ -1,7 +1,7 @@
 package com.razanqraini.metaweatherapp.utils.extensions
 
-import com.razanqraini.metaweatherapp.di.net.model.Response
-import com.razanqraini.metaweatherapp.di.net.model.Status
+import com.razanqraini.metaweatherapp.di.net.response.Response
+import com.razanqraini.metaweatherapp.di.net.response.Status
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.annotations.CheckReturnValue

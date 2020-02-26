@@ -1,8 +1,11 @@
 package com.razanqraini.metaweatherapp.di.net.weather.model
 
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class ConsolidatedWeather(
     @SerializedName("id")
     val id: Long,
@@ -34,4 +37,4 @@ data class ConsolidatedWeather(
     val visibility: Double,
     @SerializedName("predictability")
     val predictability: Int
-)
+) : Parcelable

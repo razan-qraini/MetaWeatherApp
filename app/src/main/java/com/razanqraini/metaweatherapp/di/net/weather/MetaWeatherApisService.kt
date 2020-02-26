@@ -1,35 +1,34 @@
 package com.razanqraini.metaweatherapp.di.net.weather
 
-import com.razanqraini.metaweatherapp.di.net.model.StandardApiResponse
 import com.razanqraini.metaweatherapp.di.net.weather.model.LocationDay
 import com.razanqraini.metaweatherapp.di.net.weather.model.LocationInfo
 import com.razanqraini.metaweatherapp.di.net.weather.model.LocationSearchLattLong
 import com.razanqraini.metaweatherapp.di.net.weather.model.LocationSearchName
-import retrofit2.Call
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface MetaWeatherApis {
+interface MetaWeatherApisService {
 
-    @GET("/search/")
+    @GET("api/location/search/")
     fun searchLocationByName(
         @Query("query") name: String
-    ): Call<StandardApiResponse<List<LocationSearchName>>>
+    ): Single<List<LocationSearchName>>
 
-    @GET("/search/")
+    @GET("api/location/search/")
     fun searchLocationByLattLong(
         @Query("lattlong") lattLong: String
-    ): Call<StandardApiResponse<List<LocationSearchLattLong>>>
+    ): Single<List<LocationSearchLattLong>>
 
-    @GET("/{woeid}")
+    @GET("api/location/{woeid}/")
     fun getLocationInfo(
         @Path("woeid") woeid: Long
-    ): Call<StandardApiResponse<LocationInfo>>
+    ): Single<LocationInfo>
 
-    @GET("/{woeid}/{date}")
+    @GET("api/location/{woeid}/{date}/")
     fun getLocationInfoForDay(
         @Path("woeid") woeid: Long,
         @Path("date") date: String
-    ): Call<StandardApiResponse<List<LocationDay>>>
+    ): Single<List<LocationDay>>
 }

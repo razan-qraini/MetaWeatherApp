@@ -2,8 +2,8 @@ package com.razanqraini.metaweatherapp.di.net
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.razanqraini.metaweatherapp.di.net.model.Response
-import com.razanqraini.metaweatherapp.di.net.model.Status
+import com.razanqraini.metaweatherapp.di.net.response.Response
+import com.razanqraini.metaweatherapp.di.net.response.Status
 
 /**
  * A custom Api callback that can receive from [LiveData]

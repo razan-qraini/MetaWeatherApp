@@ -1,6 +1,7 @@
 package com.razanqraini.metaweatherapp.di
 
 import android.content.Context
+import com.razanqraini.metaweatherapp.binding.BindingAdapters
 import com.razanqraini.metaweatherapp.context.MetaWeatherApplication
 import com.razanqraini.metaweatherapp.di.lifecycle.ApplicationLifeCycleListenerImpl
 import com.razanqraini.metaweatherapp.di.net.ApiResponseHandlerProvider
@@ -19,4 +20,9 @@ object ApplicationDependencyInjector {
 
     fun inject(context: Context, instance: ApiResponseHandlerProvider) =
         getApplicationComponent(context).inject(instance)
+
+    fun inject(context: Context, instance: BindingAdapters) =
+        getApplicationComponent(context).inject(instance)
+
+
 }

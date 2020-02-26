@@ -1,8 +1,11 @@
 package com.razanqraini.metaweatherapp.di.net.weather.model
 
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class LocationInfo(
     @SerializedName("consolidated_weather")
     val consolidatedWeather: List<ConsolidatedWeather>,
@@ -28,4 +31,4 @@ data class LocationInfo(
     val lattLong: String,
     @SerializedName("timezone")
     val timezone: String
-)
+) : Parcelable

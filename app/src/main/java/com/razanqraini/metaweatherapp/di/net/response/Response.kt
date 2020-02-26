@@ -1,4 +1,4 @@
-package com.razanqraini.metaweatherapp.di.net.model
+package com.razanqraini.metaweatherapp.di.net.response
 
 /**
  * A generic response class that holds a data and error with a [Status] to indicate if the response is successful

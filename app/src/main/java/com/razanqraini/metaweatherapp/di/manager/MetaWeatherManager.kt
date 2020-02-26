@@ -1,7 +1,5 @@
 package com.razanqraini.metaweatherapp.di.manager
 
-import com.razanqraini.metaweatherapp.di.net.model.ApiError
-import com.razanqraini.metaweatherapp.di.net.model.Response
 import com.razanqraini.metaweatherapp.di.net.weather.model.LocationDay
 import com.razanqraini.metaweatherapp.di.net.weather.model.LocationInfo
 import com.razanqraini.metaweatherapp.di.net.weather.model.LocationSearchLattLong
@@ -11,18 +9,18 @@ import io.reactivex.Single
 interface MetaWeatherManager {
     fun searchLocationByName(
         locationName: String
-    ): Single<Response<List<LocationSearchName>, ApiError>>
+    ): Single<List<LocationSearchName>>
 
     fun searchLocationByLattLong(
         lattLong: String
-    ): Single<Response<List<LocationSearchLattLong>, ApiError>>
+    ): Single<List<LocationSearchLattLong>>
 
     fun getLocationInfo(
         locationName: String
-    ): Single<Response<LocationInfo, ApiError>>
+    ): Single<LocationInfo>
 
-    fun getLocationInfoForDay(
+    fun getWeatherForDate(
         locationName: String,
         date: String
-    ): Single<Response<List<LocationDay>, ApiError>>
+    ): Single<List<LocationDay>>
 }

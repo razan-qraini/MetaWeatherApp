@@ -4,8 +4,8 @@ import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.razanqraini.metaweatherapp.di.net.model.ApiError
-import com.razanqraini.metaweatherapp.di.net.model.Response
+import com.razanqraini.metaweatherapp.di.net.response.ApiError
+import com.razanqraini.metaweatherapp.di.net.response.Response
 import com.razanqraini.metaweatherapp.utils.extensions.subscribeOnMain
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
