@@ -58,9 +58,6 @@ class WeatherFragment : Fragment(), Injectable {
                 // Display tomorrow's weather - second item in the list
                 binding.consolidatedWeatherItem = it.consolidatedWeather[1]
             })
-            errorEventLiveData.observe(viewLifecycleOwner, EventObserver {
-                // show error msg
-            })
         }
     }
 

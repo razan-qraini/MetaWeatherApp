@@ -26,9 +26,6 @@ class WeatherFragmentViewModel @Inject constructor(
     private val _locationInfoLiveData = MutableLiveData<LocationInfo>()
     val locationInfoLiveData: LiveData<LocationInfo> = _locationInfoLiveData
 
-    private val _errorEventLiveData = MutableLiveData<Event<ApiError?>>()
-    val errorEventLiveData: LiveData<Event<ApiError?>> = _errorEventLiveData
-
     fun refreshLocationInfo() {
         locationName?.let {
             loadLocationInfo(it, true)

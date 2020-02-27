@@ -52,9 +52,6 @@ class HomeActivity : AppCompatActivity() {
                     offscreenPageLimit = 1
                 }
             })
-            errorEventLiveData.observe(this@HomeActivity, EventObserver {
-                // TODO: show an error message
-            })
         }
     }
 

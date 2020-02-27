@@ -21,9 +21,8 @@ class HomeViewModel @Inject constructor(
     private val _locationsListLiveData = MutableLiveData<List<String>>()
     val locationsListLiveData: LiveData<List<String>> = _locationsListLiveData
 
-    private val _errorEventLiveData = MutableLiveData<Event<ApiError?>>()
-    val errorEventLiveData: LiveData<Event<ApiError?>> = _errorEventLiveData
-
+    // Currently this is a static list of locations. I will update this in the future so these
+    // locations will be cached and user can add/delete them.
     private val locationsNames = listOf(
         "Gothenburg",
         "Stockholm",

@@ -23,6 +23,4 @@ object ApplicationDependencyInjector {
 
     fun inject(context: Context, instance: BindingAdapters) =
         getApplicationComponent(context).inject(instance)
-
-
 }

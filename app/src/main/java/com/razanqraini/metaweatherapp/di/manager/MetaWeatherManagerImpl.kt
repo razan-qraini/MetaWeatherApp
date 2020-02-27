@@ -46,7 +46,4 @@ class MetaWeatherManagerImpl @Inject constructor(
             }
         }
     }
-
-    private fun generateIconUrl(iconCode: String): String =
-        "https://www.metaweather.com/static/img/weather/png/64/$iconCode.png"
 }

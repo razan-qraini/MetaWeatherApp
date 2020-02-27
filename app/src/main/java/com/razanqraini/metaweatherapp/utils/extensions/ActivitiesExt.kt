@@ -37,21 +37,6 @@ inline fun <reified VM : ViewModel> Fragment.viewModel(): VM {
         .get(VM::class.java)
 }
 
-/**
- * Returns the view model that was already created by the parent activity.
- *
- * If the the view model is not already created by the parent activity,
- * then a new one will be created and associated with the parent activity.
- *
- * Note that the parent activity must not be null or else [IllegalStateException] will be thrown.
- */
-inline fun <reified VM : ViewModel> Fragment.sharedActivityViewModel(): VM {
-    activity?.let {
-        return ViewModelProviders.of(it, ViewModelFactoryProvider(context!!).viewModelFactory)
-            .get(VM::class.java)
-    } ?: throw IllegalStateException("Can't create ${VM::class.java.name}, parent activity == null")
-}
-
 fun <V : ViewDataBinding> Fragment.inflateBinding(
     layoutRes: Int,
     viewGroup: ViewGroup?,
