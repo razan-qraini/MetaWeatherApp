@@ -22,11 +22,10 @@ Model-View-ViewModel, Manager (Repository), Dependency Injection.
   * [Fragment][34] - A basic unit of composable UI.
   * [Layout][35] - Lay out widgets using different algorithms.
   * ViewPager2
-  * 
 * Third party
   * Dagger2 for Dependency Injection
   * [Glide][90] for image loading
-  * [MetaWeather API][4] - For reverse geocoding the zip code.
+  * [MetaWeather API][4] An automated weather data aggregator that takes the weather predictions from various forecasters and calculates the most likely outcome.
 
 
 [0]: https://developer.android.com/jetpack/components
