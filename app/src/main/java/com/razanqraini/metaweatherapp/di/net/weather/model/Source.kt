@@ -5,7 +5,6 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 data class Source(
     @SerializedName("title")
     val title: String,
@@ -15,4 +14,4 @@ data class Source(
     val url: String,
     @SerializedName("crawl_rate")
     val crawlRate: Int
-) : Parcelable
+)

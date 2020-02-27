@@ -1,17 +1,18 @@
-package com.razanqraini.metaweatherapp.ui
+package com.razanqraini.metaweatherapp.ui.home
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.razanqraini.metaweatherapp.R
 import com.razanqraini.metaweatherapp.databinding.ActivityHomeBinding
 import com.razanqraini.metaweatherapp.utils.EventObserver
 import com.razanqraini.metaweatherapp.utils.extensions.setupToolbar
-import com.razanqraini.metaweatherapp.utils.extensions.*
+import com.razanqraini.metaweatherapp.utils.extensions.viewModel
+import timber.log.Timber
 
 class HomeActivity : AppCompatActivity() {
 
@@ -19,7 +20,7 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
 
-    private lateinit var locationsAdapter: LocationsAdapter
+    private lateinit var pagerAdapter: WeatherAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,31 +30,45 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        setupToolbar()
-        locationsAdapter = LocationsAdapter {
-            // TODO: open details activity
-        }
+        setupToolbar(displayHomeAsUpEnabled = false)
         with(binding) {
             lifecycleOwner = this@HomeActivity
             viewModel = this@HomeActivity.viewModel
-            with(locationsRecyclerView) {
-                layoutManager = LinearLayoutManager(context)
-                adapter = locationsAdapter
-                addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.HORIZONTAL))
-                setHasFixedSize(true)
+            with(viewPager) {
+                offscreenPageLimit = 1
+                registerOnPageChangeCallback(onPageChangeCallback)
             }
         }
-
     }
 
     private fun initViewModel() {
         with(viewModel) {
             locationsListLiveData.observe(this@HomeActivity, Observer {
-                locationsAdapter.submitList(it)
+                pagerAdapter = WeatherAdapter(
+                    this@HomeActivity, it, VIEW_PAGER_OFFSET
+                )
+                binding.viewPager.apply {
+                    adapter = pagerAdapter
+                    offscreenPageLimit = 1
+                }
             })
             errorEventLiveData.observe(this@HomeActivity, EventObserver {
                 // TODO: show an error message
             })
         }
+    }
+
+    private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            Timber.d(">>> onPageSelected : $position")
+        }
+    }
+
+    companion object {
+        private const val VIEW_PAGER_OFFSET = Int.MAX_VALUE / 2
+
+        fun newIntent(
+            context: Context
+        ) = Intent(context, HomeActivity::class.java)
     }
 }

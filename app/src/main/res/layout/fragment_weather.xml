@@ -1,133 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="com.razanqraini.metaweatherapp.utils.DatesUtil" />
+
+        <variable
+            name="weatherIconUrl"
+            type="String" />
 
         <variable
             name="locationInfoItem"
             type="com.razanqraini.metaweatherapp.di.net.weather.model.LocationInfo" />
 
         <variable
+            name="consolidatedWeatherItem"
+            type="com.razanqraini.metaweatherapp.di.net.weather.model.ConsolidatedWeather" />
+
+        <variable
             name="viewModel"
             type="com.razanqraini.metaweatherapp.ui.home.WeatherFragmentViewModel" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:elevation="5dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="3dp"
-        app:cardUseCompatPadding="false">
+        android:layout_height="match_parent">
 
-        <FrameLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="16dp">
+            app:OnRefreshListener="@{() -> viewModel.refreshLocationInfo()}"
+            app:enabled="@{!safeUnbox(viewModel.isLoading)}"
+            app:refreshing="@{safeUnbox(viewModel.isRefreshing)}">
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipeRefreshLayout"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:OnRefreshListener="@{() -> viewModel.refreshLocationInfo()}"
-                app:enabled="@{!safeUnbox(viewModel.isLoading)}"
-                app:refreshing="@{safeUnbox(viewModel.isRefreshing)}">
+                android:layout_marginStart="1dp"
+                android:layout_marginEnd="1dp"
+                android:background="@drawable/bg_gradient"
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/start_guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp">
+                    app:layout_constraintGuide_begin="16dp" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/start_guideline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_begin="20dp" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/end_guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="20dp" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/end_guideline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_end="20dp" />
+                <TextView
+                    android:id="@+id/location_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="@{locationInfoItem.title}"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/end_guideline"
+                    app:layout_constraintStart_toStartOf="@id/start_guideline"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@tools:sample/cities" />
 
-                    <TextView
-                        android:id="@+id/location_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{locationInfoItem.title}"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="20sp"
-                        app:layout_constraintStart_toEndOf="@id/start_guideline"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="@tools:sample/cities" />
+                <TextView
+                    android:id="@+id/location_date_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@{consolidatedWeatherItem.applicableDate}"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@id/end_guideline"
+                    app:layout_constraintStart_toStartOf="@id/start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/location_name"
+                    tools:text="@tools:sample/date/mmddyy" />
 
-                    <TextView
-                        android:id="@+id/high_low_temp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="18sp"
-                        app:layout_constraintStart_toEndOf="@id/start_guideline"
-                        app:layout_constraintTop_toBottomOf="@id/location_name"
-                        tools:text="H 27°/L 23°" />
+                <ImageView
+                    android:id="@+id/weather_icon"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="8dp"
+                    app:layout_constraintEnd_toEndOf="@id/end_guideline"
+                    app:layout_constraintStart_toStartOf="@id/start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/location_date_time"
+                    app:weather_icon="@{consolidatedWeatherItem.iconUrl}"
+                    tools:ignore="ContentDescription"
+                    tools:srcCompat="@drawable/ic_light_cloud" />
 
-                    <ImageView
-                        android:id="@+id/weather_icon"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:layout_margin="8dp"
-                        app:layout_constraintStart_toEndOf="@id/start_guideline"
-                        app:layout_constraintTop_toBottomOf="@id/high_low_temp"
-                        tools:ignore="ContentDescription"
-                        tools:srcCompat="@drawable/ic_light_cloud" />
+                <TextView
+                    android:id="@+id/temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="20dp"
+                    android:text="@{consolidatedWeatherItem.formattedDegree}"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/end_guideline"
+                    app:layout_constraintStart_toStartOf="@id/start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/weather_icon"
+                    tools:text="20°" />
 
-                    <TextView
-                        android:id="@+id/temperature"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="30sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toEndOf="@id/start_guideline"
-                        app:layout_constraintTop_toBottomOf="@id/weather_icon"
-                        tools:text="20°" />
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@{consolidatedWeatherItem.weatherStateName}"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@id/end_guideline"
+                    app:layout_constraintStart_toEndOf="@id/start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/temp"
+                    tools:text="Sunny" />
 
-                    <TextView
-                        android:id="@+id/description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="18sp"
-                        app:layout_constraintStart_toEndOf="@id/start_guideline"
-                        app:layout_constraintTop_toBottomOf="@id/temperature"
-                        tools:text="Sunny" />
+                <ImageView
+                    android:id="@+id/humidity_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="60dp"
+                    app:layout_constraintEnd_toEndOf="@id/end_guideline"
+                    app:layout_constraintStart_toStartOf="@id/start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/description"
+                    app:srcCompat="@drawable/ic_rain_drops"
+                    app:tint="@color/white"
+                    tools:ignore="ContentDescription" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                <TextView
+                    android:id="@+id/humidity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="30dp"
+                    android:gravity="center"
+                    android:text="@{@string/humidity(consolidatedWeatherItem.humidityPercentage)}"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="@id/humidity_icon"
+                    app:layout_constraintStart_toStartOf="@id/humidity_icon"
+                    app:layout_constraintTop_toBottomOf="@id/humidity_icon"
+                    app:visibleGone="@{!safeUnbox(viewModel.isLoading)}"
+                    tools:text="86%" />
 
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:visibleGone="@{safeUnbox(viewModel.isLoading)}" />
-        </FrameLayout>
-    </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:id="@+id/wind_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/humidity_icon"
+                    app:layout_constraintEnd_toStartOf="@id/humidity_icon"
+                    app:layout_constraintStart_toStartOf="@id/start_guideline"
+                    app:layout_constraintTop_toTopOf="@+id/humidity_icon"
+                    app:srcCompat="@drawable/ic_wind"
+                    app:tint="@color/white"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/wind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="30dp"
+                    android:gravity="center"
+                    android:text="@{@string/wind_speed(consolidatedWeatherItem.formattedWindSpeed)}"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="@+id/wind_icon"
+                    app:layout_constraintStart_toStartOf="@+id/wind_icon"
+                    app:layout_constraintTop_toBottomOf="@+id/wind_icon"
+                    app:visibleGone="@{!safeUnbox(viewModel.isLoading)}"
+                    tools:text="10 mph" />
+
+                <ImageView
+                    android:id="@+id/pressure_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/humidity_icon"
+                    app:layout_constraintEnd_toStartOf="@+id/end_guideline"
+                    app:layout_constraintStart_toEndOf="@+id/humidity_icon"
+                    app:layout_constraintTop_toTopOf="@+id/humidity_icon"
+                    app:srcCompat="@drawable/ic_gauge"
+                    app:tint="@color/white"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/pressure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="30dp"
+                    android:gravity="center"
+                    android:text="@{@string/air_pressure(consolidatedWeatherItem.formattedAirPressure)}"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="@+id/pressure_icon"
+                    app:layout_constraintStart_toStartOf="@+id/pressure_icon"
+                    app:layout_constraintTop_toBottomOf="@+id/pressure_icon"
+                    app:visibleGone="@{!safeUnbox(viewModel.isLoading)}"
+                    tools:text="20 mbar" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:visibleGone="@{safeUnbox(viewModel.isLoading)}"
+            tools:visibility="gone" />
+    </FrameLayout>
 </layout>

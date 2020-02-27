@@ -3,20 +3,18 @@ package com.razanqraini.metaweatherapp.ui.home
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.razanqraini.metaweatherapp.di.net.weather.model.LocationInfo
 
-class LocationsAdapter(
+class WeatherAdapter(
     fragmentActivity: FragmentActivity,
-    private val locationsInfoList: List<LocationInfo>,
+    private val locationsInfoList: List<String>,
     private val pagesOffset: Int
 ) : FragmentStateAdapter(fragmentActivity) {
 
     override fun getItemCount(): Int {
-        return Int.MAX_VALUE
+        return locationsInfoList.size
     }
 
     override fun createFragment(position: Int): Fragment {
-        // todo pass item
-        return EntriesFragment.newInstance(position, locationsInfoList[position])
+        return WeatherFragment.newInstance(position, locationsInfoList[position])
     }
 }

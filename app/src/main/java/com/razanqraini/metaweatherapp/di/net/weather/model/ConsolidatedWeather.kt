@@ -1,11 +1,10 @@
 package com.razanqraini.metaweatherapp.di.net.weather.model
 
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
-@Parcelize
 data class ConsolidatedWeather(
     @SerializedName("id")
     val id: Long,
@@ -37,4 +36,22 @@ data class ConsolidatedWeather(
     val visibility: Double,
     @SerializedName("predictability")
     val predictability: Int
-) : Parcelable
+) {
+    val formattedDegree: String
+        get() = String.format("%d°", theTemp.roundToInt())
+
+    val iconUrl: String
+        get() = String.format(
+            "https://www.metaweather.com/static/img/weather/png/64/$weatherStateAbbr.png",
+            weatherStateAbbr
+        )
+
+    val humidityPercentage: String
+    get() = "$humidity%"
+
+    val formattedWindSpeed: String
+    get() = "${windSpeed.roundToLong()} mph"
+
+    val formattedAirPressure: String
+    get() = "${airPressure.roundToLong()} mbar"
+}
