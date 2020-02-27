@@ -1,24 +1,62 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdkVersion 29
+    def targetSDK = 29
+    def minSdk = 21
+    def applicationPackage = "com.razanqraini.metaweatherapp"
+    compileSdkVersion targetSDK
+
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.razanqraini.metaweatherapp"
-        minSdkVersion 21
-        targetSdkVersion 29
+        applicationId applicationPackage
+        minSdkVersion minSdk
+        targetSdkVersion targetSDK
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled = true
     }
+
+    dataBinding {
+        enabled = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    dexOptions {
+        preDexLibraries = false
+        jumboMode true
+        javaMaxHeapSize "12g"
+    }
+
+    flavorDimensions 'default'
+
+    productFlavors {
+        dev {
+            dimension = 'default'
+            buildConfigField 'boolean', 'DEBUG_ENABLED', 'true'
+
+            //MetaWeather domain
+            buildConfigField 'String', 'META_WEATHER_DOMAIN', '"https://www.metaweather.com/"'
         }
     }
 }
@@ -29,6 +67,52 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.android.material:material:1.2.0-alpha05'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+
+    // KTX
+    implementation 'androidx.core:core-ktx:1.2.0'
+
+    // Lifecycle, ViewModel and LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
+
+    // Recommended: Add the Firebase SDK for Google Analytics
+    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+
+    // Add the Firebase SDK for Crashlytics
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
+
+    // Dagger2
+    implementation 'com.google.dagger:dagger-android:2.23.1'
+    implementation "com.google.dagger:dagger-android-support:2.23.1"
+    kapt "com.google.dagger:dagger-android-processor:2.23.1"
+    kapt 'com.google.dagger:dagger-compiler:2.23.1'
+
+    // Retrofit2 Dependencies
+    implementation "com.squareup.retrofit2:retrofit:2.7.1"
+    implementation "com.squareup.retrofit2:converter-gson:2.7.1"
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    // RxJava
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
+    implementation "io.reactivex.rxjava2:rxkotlin:2.3.0"
+
+
+    // Timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    // View Pager 2
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+
+    // Glide Dependencies
+    implementation "com.github.bumptech.glide:glide:4.9.0"
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt "com.github.bumptech.glide:compiler:4.9.0"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'

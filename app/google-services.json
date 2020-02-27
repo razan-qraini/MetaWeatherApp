@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "923203012718",
+    "firebase_url": "https://metaweatherapp.firebaseio.com",
+    "project_id": "metaweatherapp",
+    "storage_bucket": "metaweatherapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923203012718:android:a0d6e97d6d7b9d07bbfe7f",
+        "android_client_info": {
+          "package_name": "com.razanqraini.metaweatherapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "923203012718-kmnlhhn12ns3ucqnbdbk8siqprlat0v9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQkUqKhGpQVnX1kZfg94CE3YUhCSz3tZg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "923203012718-kmnlhhn12ns3ucqnbdbk8siqprlat0v9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
