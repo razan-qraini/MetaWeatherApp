@@ -58,6 +58,13 @@ android {
             //MetaWeather domain
             buildConfigField 'String', 'META_WEATHER_DOMAIN', '"https://www.metaweather.com/"'
         }
+        prod {
+            dimension = 'default'
+            buildConfigField 'boolean', 'DEBUG_ENABLED', 'false'
+
+            //MetaWeather domain
+            buildConfigField 'String', 'META_WEATHER_DOMAIN', '"https://www.metaweather.com/"'
+        }
     }
 }
 
